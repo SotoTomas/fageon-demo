@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self'; connect-src 'self' https://challenges.cloudflare.com https://fageon-public-demo-api.academia-public-demo-api.workers.dev; frame-src https://challenges.cloudflare.com; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self'; connect-src 'self' https://challenges.cloudflare.com https://fageon-public-demo-api.academia-public-demo-api.workers.dev; frame-src https://challenges.cloudflare.com; worker-src 'self' blob:; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'none'" />
     <meta name="referrer" content="no-referrer" />
     <meta name="theme-color" content="#153b32" />
     <meta name="description" content="Probá Fageon: de un comprobante ficticio a datos con evidencia y una decisión de revisión humana." />
     <title>Fageon — Del documento a la decisión</title>
     <link rel="icon" type="image/svg+xml" href="./assets/mark-DSEJfiSw.svg" />
-    <script type="module" crossorigin src="./assets/index-C2BPH-HF.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CMmeLLXB.css">
+    <script type="module" crossorigin src="./assets/index-BktxKozB.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-PKlXrA3i.css">
   </head>
   <body>
     <a class="skip" href="#workspace">Ir a la demostración</a>
@@ -30,9 +30,16 @@
         <span class="step" id="step-extract"><b>02</b> Revisá la evidencia</span>
         <span class="step" id="step-review"><b>03</b> Tomá una decisión</span>
       </nav>
+      <section class="upload-panel" aria-labelledby="upload-title">
+        <div><p class="eyebrow">PROBÁ CON TU COMPROBANTE</p><h2 id="upload-title">Subí una factura. Revisá seis datos.</h2><p>Proveedor, CUIT, número, fecha, moneda y total. PDF con texto, JPG o PNG de hasta 5 MB. En PDF se lee solo la primera página; para escaneos, usá una imagen.</p></div>
+        <label class="upload-picker">Elegir factura<input id="invoice-file" type="file" accept="application/pdf,image/jpeg,image/png,.pdf,.jpg,.jpeg,.png" /></label>
+        <p id="upload-status" role="status">El archivo se prepara localmente y solo se envía al pulsar «Extraer con IA».</p>
+        <label class="upload-consent"><input id="upload-consent" type="checkbox" /> Autorizo el envío del texto o imagen reducida a la API de demo y OpenAI. Tengo permiso para usar este comprobante. La app no guarda archivos ni resultados; el proveedor aplica sus políticas de tratamiento de datos.</label>
+        <button id="clear-upload" class="text-button" type="button" hidden>Quitar archivo y borrar esta sesión</button>
+      </section>
       <section class="workspace" id="workspace" aria-label="Demostración de extracción">
         <aside class="examples"><p class="eyebrow">TU BANDEJA DE PRUEBA</p><h2>¿Por dónde empezamos?</h2><div id="fixture-list" class="fixture-list"></div><p class="examples-note">Ejemplos del proyecto original.<br />No tienen validez fiscal ni legal.</p></aside>
-        <article class="document-panel" aria-labelledby="document-title"><div class="panel-heading"><span class="eyebrow">DOCUMENTO ORIGINAL</span><span class="tag">FICTICIO</span></div><div class="paper"><div class="paper-brand">FARO <span>FICTICIO</span><small>DOCUMENTO DE EJEMPLO</small></div><h2 id="document-title"></h2><pre id="document-text"></pre><div class="paper-footer"><span>FAGEON / DEMO PÚBLICA</span><span>01 / 01</span></div></div><p class="document-caption">Texto de ejemplo autorizado. La demo no permite cargar archivos personales.</p></article>
+        <article class="document-panel" aria-labelledby="document-title"><div class="panel-heading"><span class="eyebrow">DOCUMENTO ORIGINAL</span><span class="tag" id="document-tag">FICTICIO</span></div><div class="paper"><div class="paper-brand" id="paper-brand">FARO <span>FICTICIO</span><small>DOCUMENTO DE EJEMPLO</small></div><h2 id="document-title"></h2><pre id="document-text"></pre><img id="upload-preview" alt="Vista reducida de la factura seleccionada" hidden /><div class="paper-footer"><span>FAGEON / DEMO PÚBLICA</span><span>01 / 01</span></div></div><p class="document-caption" id="document-caption">Elegí un ejemplo ficticio o cargá tu factura para una extracción breve.</p></article>
         <section class="result-panel" aria-labelledby="result-title"><div class="panel-heading"><span class="eyebrow">ESPACIO DE REVISIÓN</span><span class="status-tag" id="stage-label">Sin procesar</span></div>
           <div id="empty-result"><div class="extract-icon" aria-hidden="true">↗</div><h2 id="result-title">Los datos, con respaldo.</h2><p>Pedile a la IA que lea este comprobante. Cada dato extraído debe señalar el fragmento que lo sostiene.</p><div class="capability"><span>01</span> Extracción estructurada</div><div class="capability"><span>02</span> Evidencia del documento</div><div class="capability"><span>03</span> Revisión humana</div></div>
           <div class="notice" id="availability" role="status">Comprobando la conexión con la demo…</div>
@@ -50,7 +57,7 @@
       </section>
       <section class="takeaway"><span aria-hidden="true">✳</span><div><h2>Automatizar la lectura. Conservar el control.</h2><p>Fageon convierte comprobantes en propuestas de datos. La revisión humana mantiene visibles las dudas y la evidencia.</p></div><span class="takeaway-label">IA + CRITERIO HUMANO</span></section>
     </main>
-    <footer><span class="footer-brand">fageon<span> / demo pública</span></span><p>La sesión vive en esta pestaña y dura hasta 20 minutos. Sin cuentas, archivos personales ni guardado de resultados. Se conservan contadores temporales de uso para proteger el cupo.</p></footer>
+    <footer><span class="footer-brand">fageon<span> / demo pública</span></span><p>La sesión vive en esta pestaña y dura hasta 20 minutos. Sin cuentas ni guardado de archivos o resultados. El contenido autorizado se procesa con OpenAI. Se conservan contadores temporales de uso para proteger el cupo.</p></footer>
     <noscript>Activá JavaScript para probar la demostración.</noscript>
   </body>
 </html>
